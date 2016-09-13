@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Splash 2</title>
-</head>
-<body>
-Hello World!
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Twitter Cannibal!{% endblock %}
+{% block content %}
+
+
+
+<div class ='col-md-6 col-md-offset-3 text-center'>
+  <!--Status message updates-->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% if authurl %}
+    <img class="img-rounded" src="/static/images/twitter_logo.png">
+    <a class="btn btn-default btn-lg" href={{ authurl }} role="button">Authenticate</a>
+
+  {% else %}
+
+    {{ descdat.to_html()|safe }}
+    <br>
+    <br>
+    {{ retwdat }}
+
+  {% endif %}
+</div>
+
+{% endblock %}
