@@ -11,12 +11,8 @@ def search_reddit(term):
     url = "https://www.reddit.com/subreddits/search.json?q=%s" % term
     r = requests.get(url, headers=headers)
 
-    print term
-    print url
-
     # Convert to dictionary list
     rdict = r.json()
-    print rdict
     sublist = rdict['data']['children']
 
     # Iterate and pull out info
@@ -30,4 +26,4 @@ def search_reddit(term):
         }]
 
     # Covert to pands and return
-    return pd.DataFrame.from_dict(subs)
+    return subs

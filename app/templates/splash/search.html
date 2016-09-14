@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Twitter Cannibal!{% endblock %}
+{% block content %}
+
+
+
+<div class ='col-md-10 col-md-offset-1'>
+  <div class="row">
+
+    <div class="col-md-4">
+      <!-- Terms Table -->
+      <table class="table">
+        {% for term in terms %}
+        <tr><td><a href={{ url_for('splash.search', term=term) }}>{{ term }}</a></td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="col-md-8">
+      <table class="table">
+        <tr>
+          <th>Subreddit</th>
+          <th>Description</th>
+          <th>Subscribers</th>
+        </tr>
+        {% for sub in redresults %}
+          <tr>
+            <td>{{ sub['name'] }}</td>
+            <td>{{ sub['description'] }}</td>
+            <td>{{ sub['subscribers'] }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,29 +1,46 @@
 from flask import Blueprint, render_template, session, redirect, url_for
 from flask import current_app as app
 import tweepy
-from app.logic.analysis import analyze_descriptions, analyze_retweets
+from app.logic.analysis import analyze_descriptions
 from app.models import User
 from app.logic.search import search_reddit
+import datetime
 
 # Register blueprint
 splash = Blueprint('splash', __name__)
+
+
+# Functions
+def timecheck(stamp):
+    if stamp:
+        # Has it been 15 minutes since this analysis was run?
+        tdelta = datetime.datetime.now() - stamp
+
+        return tdelta > datetime.timedelta(minutes=15)
+    else:
+        return True
 
 
 @splash.route('/')
 def index():
     # Check if this person has authed
     if 'userid' in session:
-        # Reterive user tokens
-        uinfo = User.lookup_user(session['userid'])
 
-        # Analyze this user
-        descdat = analyze_descriptions(uinfo.token, uinfo.token_secret)
-        topdat = descdat.sort_values('count', ascending=False).head(10)
+        # Check if we need to run analysis again
+        if timecheck(session.get('timestamp')):
+            # Reterive user tokens
+            uinfo = User.lookup_user(session['userid'])
 
-        # Search Reddit
-        search_results = search_reddit(topdat.word.head(1).tolist()[0])
+            # Analyze Descriptions and save to session
+            descdat = analyze_descriptions(uinfo.token, uinfo.token_secret)
+            topdat = descdat.sort_values('count', ascending=False).head(10)
+            session['topterms'] = topdat.word.tolist()
+            session['timestamp'] = datetime.datetime.now()
 
-        return render_template("splash/index.html", descdat=search_results)
+        # Get first term
+        fterm = session['topterms'][0]
+
+        return redirect(url_for('splash.search', term=fterm))
 
     else:
         # Generate oAuth URL
@@ -37,3 +54,15 @@ def index():
         session['reqtoke'] = tw_auth.request_token
 
         return render_template("splash/index.html", authurl=aurl)
+
+
+@splash.route('/search/<string:term>')
+def search(term):
+    # Search Reddit
+    search_results = search_reddit(term)
+
+    # Found terms
+    topterms = session['topterms']
+
+    return render_template("splash/search.html", redresults=search_results,
+                           terms=topterms)

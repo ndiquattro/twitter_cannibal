@@ -13,7 +13,7 @@ class TweetGrabber(object):
         self.api = tweepy.API(tw_auth)
 
     def get_descriptions(self):
-        friends = tweepy.Cursor(self.api.friends).items(20)
+        friends = tweepy.Cursor(self.api.friends).items(300)
         follows = []
         for friend in friends:
             # Process each follow
