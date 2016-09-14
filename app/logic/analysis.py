@@ -3,9 +3,9 @@ from preprocess import text_cleaner
 from nlps import word_bagger
 
 
-def analyze_descriptions(screen_name):
+def analyze_descriptions(token, token_secret):
     # Initialize Data
-    tw_api = TweetGrabber(screen_name)
+    tw_api = TweetGrabber(token, token_secret)
 
     # Descriptions
     descriptions = tw_api.get_descriptions()

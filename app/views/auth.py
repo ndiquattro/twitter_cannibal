@@ -16,8 +16,6 @@ def authuser():
                                   app.config['TWSEC'],
                                   app.config['TWCALL'])
 
-    tw_auth = tweepy.AppAuthHandler()
-
     # Get tokens
     verifier = request.args.get('oauth_verifier')
     tw_auth.request_token = session['reqtoke']

@@ -4,19 +4,16 @@ import tweepy
 
 
 class TweetGrabber(object):
-    def __init__(self, screen_name):
+    def __init__(self, token, token_secret):
         # oAuth
-        tw_auth = tweepy.AppAuthHandler(app.config['TWTOKE'],
-                                        app.config['TWSEC'])
-        # tw_auth.set_access_token(token, token_secret)
+        tw_auth = tweepy.OAuthHandler(app.config['TWTOKE'], app.config['TWSEC'])
+        tw_auth.set_access_token(token, token_secret)
 
         # Set up API
         self.api = tweepy.API(tw_auth)
-        self.screen_name = screen_name
 
     def get_descriptions(self):
-        friends = tweepy.Cursor(self.api.friends,
-                                screen_name=self.screen_name).items()
+        friends = tweepy.Cursor(self.api.friends).items(20)
         follows = []
         for friend in friends:
             # Process each follow
