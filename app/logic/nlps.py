@@ -1,33 +1,37 @@
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 import pandas as pd
-import gensim
+from nltk.corpus import stopwords
+from nltk.tokenize import casual
+
+# Construct stopwords
+en_stop = set(stopwords.words("english")).union(['http', 'https', 'rt', 'co',
+                                                 'like'])
 
 
-# Very basic bag of words
+# Bag of words
 def word_bagger(tlist):
+
+    # Take out twitter handles
+    newdoc = []
+    for doc in tlist:
+        newdoc.append(casual.remove_handles(doc))
+
     # Initialize algo
-    vectorizer = CountVectorizer(analyzer="word",
-                                 tokenizer=None,
-                                 preprocessor=None,
-                                 stop_words=None,
-                                 max_features=5000)
+    counter = CountVectorizer(ngram_range=(1, 3), stop_words=en_stop)
 
     # Fit the model
-    train_data_features = vectorizer.fit_transform(tlist)
-    train_data_features = train_data_features.toarray()
+    counts = counter.fit_transform(newdoc).toarray()
 
-    # Parse results into word counts
-    vocab = vectorizer.get_feature_names()
-    dist = np.sum(train_data_features, axis=0)  # Word counts
+    # Summarize counts
+    vocab = counter.get_feature_names()
+    dist = np.sum(counts, axis=0)
 
-    # For each, print the vocabulary word and the number of times it appears
     word_counts = []
     for tag, count in zip(vocab, dist):
         word_counts += [{'count': count, 'word': tag}]
 
+    word_counts = pd.DataFrame.from_dict(word_counts)
+
     # Return a Pandas Dataframe
-    return pd.DataFrame.from_dict(word_counts)
-
-# LDA
-
+    return word_counts

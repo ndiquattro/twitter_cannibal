@@ -9,12 +9,12 @@ def analyze_descriptions(token, token_secret):
 
     # Descriptions
     descriptions = tw_api.get_descriptions()
-    desc_clean = []
-    for desc in descriptions:
-        desc_clean.append(text_cleaner(desc))
+    # desc_clean = []
+    # for desc in descriptions:
+    #     desc_clean.append(text_cleaner(desc))
 
     # Fit model
-    word_counts = word_bagger(desc_clean)
+    word_counts = word_bagger(descriptions)
 
     return word_counts
 
