@@ -25,7 +25,7 @@
         </tr>
         {% for sub in redresults %}
           <tr>
-            <td>{{ sub['name'] }}</td>
+            <td><a href="{{ url_for('splash.sendtosub', sub=sub['name'][3:-1]) }}" target="_blank">{{ sub['name'][:-1] }}</a></td>
             <td>{{ sub['description'] }}</td>
             <td>{{ sub['subscribers'] }}</td>
           </tr>

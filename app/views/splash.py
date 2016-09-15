@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, session, redirect, url_for
 from flask import current_app as app
 import tweepy
 from app.logic.analysis import analyze_descriptions
-from app.models import User
+from app.models import User, Clicks
 from app.logic.search import search_reddit
 import datetime
 
@@ -66,3 +66,17 @@ def search(term):
 
     return render_template("splash/search.html", redresults=search_results,
                            terms=topterms)
+
+
+@splash.route('/sendtosub/<string:sub>')
+def sendtosub(sub):
+    # Look up current user
+    curusr = User.lookup_user(session['userid'])
+
+    # Add click to database
+    Clicks.add_click(sub, curusr)
+
+    # Construct URL
+    sub_url = 'http://www.reddit.com/r/' + sub
+
+    return redirect(sub_url)

@@ -1,6 +1,7 @@
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 import pandas as pd
+import gensim
 
 
 # Very basic bag of words
@@ -27,3 +28,6 @@ def word_bagger(tlist):
 
     # Return a Pandas Dataframe
     return pd.DataFrame.from_dict(word_counts)
+
+# LDA
+

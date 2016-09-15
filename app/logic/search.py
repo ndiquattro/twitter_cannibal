@@ -1,6 +1,4 @@
 import requests
-import pandas as pd
-import json
 
 
 def search_reddit(term):
@@ -19,11 +17,12 @@ def search_reddit(term):
     subs = []
     for sub in sublist:
         data = sub['data']
-        subs += [{
-            'name': data['url'],
-            'description': data['public_description'],
-            'subscribers': data['subscribers']
-        }]
+        if data['subreddit_type'] != "private":
+            subs += [{
+                'name': data['url'],
+                'description': data['public_description'],
+                'subscribers': data['subscribers']
+            }]
 
     # Covert to pands and return
     return subs

@@ -1,5 +1,4 @@
 from flask import current_app as app
-from app.models import Descriptions
 import tweepy
 
 

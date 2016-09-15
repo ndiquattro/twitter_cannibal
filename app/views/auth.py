@@ -42,11 +42,6 @@ def authuser():
                   'token_secret': tw_auth.access_token_secret}
 
         models.User.add_user(uinfod)
-        curusr = models.User.lookup_user(uinfo.id)
-
-        # Save Descriptions
-        descs = tw_api.get_descriptions()
-        models.Descriptions.add_descriptions(descs, curusr)
 
     # Make alert
     flash('Thanks! Your twitter account (%s) has been authenticated!' % uinfo.screen_name)
