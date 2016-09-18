@@ -5,7 +5,8 @@ import tweepy
 class TweetGrabber(object):
     def __init__(self, token, token_secret):
         # oAuth
-        tw_auth = tweepy.OAuthHandler(app.config['TWTOKE'], app.config['TWSEC'])
+        tw_auth = tweepy.OAuthHandler(app.config['TWTOKE'], app.config['TWSEC'],
+                                      app.config['TWCALL'])
         tw_auth.set_access_token(token, token_secret)
 
         # Set up API

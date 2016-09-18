@@ -7,6 +7,8 @@ class User(db.Model):
     twitterid = db.Column(db.Integer, index=True, unique=True)
     token = db.Column(db.String(120), unique=True)
     token_secret = db.Column(db.String(120), unique=True)
+    redtoken = db.Column(db.String(120), unique=True)
+    redrefresh = db.Column(db.String(120), unique=True)
     clicks = db.relationship('Clicks', backref='twuser', lazy='dynamic')
 
     def __repr__(self):
@@ -17,7 +19,14 @@ class User(db.Model):
         db.session.add(User(**uinfo))
         db.session.commit()
 
-        return User.query.filter_by(twitterid=uinfo.id).first()
+        return User.query.filter_by(twitterid=uinfo['twitterid']).first()
+
+    @staticmethod
+    def add_reddit_info(uobj, rinfo):
+        uobj.redtoken = rinfo['access_token']
+        uobj.redrefresh = rinfo['refresh_token']
+
+        db.session.commit()
 
     @staticmethod
     def lookup_user(uid):

@@ -18,11 +18,20 @@ def search_reddit(term):
     for sub in sublist:
         data = sub['data']
         if data['subreddit_type'] != "private":
-            subs += [{
-                'name': data['url'],
-                'description': data['public_description'],
-                'subscribers': data['subscribers']
-            }]
+            if not data['over18']:
+
+                if data['public_description']:
+                    desc = data['public_description']
+                elif data['description']:
+                    desc = data['description']
+                else:
+                    desc = "No Description :(, you'll have to check it out to see what's what!"
+
+                subs += [{
+                    'name': data['url'],
+                    'description': desc,
+                    'subscribers': data['subscribers']
+                }]
 
     # Covert to pands and return
     return subs

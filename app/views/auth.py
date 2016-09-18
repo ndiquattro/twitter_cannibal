@@ -2,6 +2,7 @@
 from flask import Blueprint, flash, redirect, request, session, url_for
 from flask import current_app as app
 import tweepy
+import praw
 from app import models
 from app.logic.data import TweetGrabber
 
@@ -9,7 +10,7 @@ from app.logic.data import TweetGrabber
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 
-@auth.route('/')
+@auth.route('/twitter')
 def authuser():
     # Initiate Handler
     tw_auth = tweepy.OAuthHandler(app.config['TWTOKE'],
@@ -45,6 +46,29 @@ def authuser():
 
     # Make alert
     flash('Thanks! Your twitter account (%s) has been authenticated!' % uinfo.screen_name)
+
+    return redirect(url_for('splash.index'))
+
+
+@auth.route('/reddit')
+def authreddit():
+    # Initiate PRAW
+    r = praw.Reddit('Twitter Cannibal 1.0 by /u/box_plot')
+    r.set_oauth_app_info(app.config['RDTOKE'], app.config['RDSEC'],
+                         app.config['RDCALL'])
+
+    # Get tokens
+    cbacktoken = request.args.get('code')
+    access_info = r.get_access_information(cbacktoken)
+
+    # Add info to database
+    curusr = models.User.lookup_user(session['userid'])
+    models.User.add_reddit_info(curusr, access_info)
+
+    session['reddit_authed'] = True
+
+    # Make alert
+    flash('Thanks! Your Reddit account has been authenticated!')
 
     return redirect(url_for('splash.index'))
 

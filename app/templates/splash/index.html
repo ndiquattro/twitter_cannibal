@@ -15,15 +15,13 @@
   {% endwith %}
 
   {% if authurl %}
-    <img class="img-rounded" src="/static/images/twitter_logo.png">
-    <a class="btn btn-default btn-lg" href={{ authurl }} role="button">Authenticate</a>
+    <a class="btn btn-default btn-lg" href={{ authurl }} role="button">Authenticate Twitter Account</a>
+    <a class="btn btn-default btn-lg" disabled="disabled" href="#" role="button">Authenticate Reddit Account</a>
 
-  {% else %}
+  {% elif raurl %}
+    <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='#' role="button">Authenticate Twitter Account</a>
+    <a class="btn btn-default btn-lg" href={{ raurl }} role="button">Authenticate Reddit Account</a>
 
-    {{ descdat.to_html()|safe }}
-    <br>
-    <br>
-    {{ retwdat }}
 
   {% endif %}
 </div>

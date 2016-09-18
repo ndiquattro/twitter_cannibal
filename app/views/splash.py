@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, url_for
 from flask import current_app as app
 import tweepy
+import praw
 from app.logic.analysis import analyze_descriptions
 from app.models import User, Clicks
 from app.logic.search import search_reddit
@@ -25,6 +26,18 @@ def timecheck(stamp):
 def index():
     # Check if this person has authed
     if 'userid' in session:
+
+        # Check for reddit authentication
+        if not session.get('reddit_authed'):
+            # Generate reddit auth url
+            r = praw.Reddit('Twitter Cannibal 1.0 by /u/box_plot')
+            r.set_oauth_app_info(app.config['RDTOKE'], app.config['RDSEC'],
+                                 app.config['RDCALL'])
+
+            reddit_aurl = r.get_authorize_url('twcan', 'mysubreddits subscribe',
+                                              True)
+
+            return render_template("splash/index.html", raurl=reddit_aurl)
 
         # Check if we need to run analysis again
         if timecheck(session.get('timestamp')):

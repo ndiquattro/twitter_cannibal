@@ -18,7 +18,7 @@ def word_bagger(tlist):
         newdoc.append(casual.remove_handles(doc))
 
     # Initialize algo
-    counter = CountVectorizer(ngram_range=(1, 3), stop_words=en_stop)
+    counter = CountVectorizer(ngram_range=(1, 3), stop_words=en_stop, min_df=4)
 
     # Fit the model
     counts = counter.fit_transform(newdoc).toarray()
