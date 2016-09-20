@@ -4,14 +4,16 @@
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock %}</title>
 
-  <link href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
-  <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap-theme.min.css') }}", rel="stylesheet">
+  <link href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css') }}", rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Bungee+Inline|Freckle+Face" rel="stylesheet">
 
 </head>
 <body>
-<div class="col-md-12 text-center">
-<h1>Twitter Cannibal</h1>
-<h2>Turn your Twitter profile into new friends on Reddit!</h2>
+<div class="col-md-12 col-md-offset-1">
+  <div class="text-left">
+    <h1 style="font-family: 'Bungee Inline', serif;">Twitter Cannibal<img class="img-rounded text-right" height="100px" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"></h1>
+  </div>
 </div>
 {% block content %}{% endblock %}
 </body>
@@ -19,4 +21,5 @@
 
 <!-- Import JS Libs -->
 <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename= 'bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>

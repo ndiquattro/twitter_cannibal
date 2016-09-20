@@ -9,10 +9,7 @@ def analyze_descriptions(token, token_secret):
     tw_api = TweetGrabber(token, token_secret)
 
     # Descriptions
-    descriptions = tw_api.get_descriptions()
-    # desc_clean = []
-    # for desc in descriptions:
-    #     desc_clean.append(text_cleaner(desc))
+    descriptions = tw_api.get_descriptions_2levels()
 
     # Fit model
     word_counts = word_bagger(descriptions)
