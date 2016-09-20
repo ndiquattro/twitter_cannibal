@@ -10,6 +10,9 @@ class User(db.Model):
     redtoken = db.Column(db.String(120), unique=True)
     redrefresh = db.Column(db.String(120), unique=True)
     clicks = db.relationship('Clicks', backref='twuser', lazy='dynamic')
+    stats = db.relationship('Stats', backref='twuser', lazy='dynamic')
+    subscriptions = db.relationship('Subscriptions', backref='twuser',
+                                    lazy='dynamic')
 
     def __repr__(self):
         return '<User %r>' % self.name
@@ -49,4 +52,31 @@ class Clicks(db.Model):
     @staticmethod
     def add_click(subname, uobject):
         db.session.add(Clicks(subname=subname, twuser=uobject))
+        db.session.commit()
+
+
+class Stats(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.twitterid'))
+    term = db.Column(db.String(400))
+    num_results = db.Column(db.Integer)
+    num_matches = db.Column(db.Integer)
+
+    @staticmethod
+    def add_data(res_data, uobject):
+        db.session.add(Stats(term=res_data['term'],
+                             num_results=res_data['num_results'],
+                             num_matches=res_data['num_matches'],
+                             twuser=uobject))
+        db.session.commit()
+
+
+class Subscriptions(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.twitterid'))
+    subreddit = db.Column(db.String(400))
+
+    @staticmethod
+    def rec_sub(sub, uobject):
+        db.session.add(Subscriptions(subreddit=sub, twuser=uobject))
         db.session.commit()

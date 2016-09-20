@@ -7,7 +7,7 @@
 <div class ='col-md-10 col-md-offset-1'>
   <div class="row">
 
-    <div class="col-md-4">
+    <div class="col-md-2">
       <!-- Terms Table -->
       <table class="table">
         {% for term in terms %}
@@ -16,18 +16,20 @@
       </table>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-10">
       <table class="table">
         <tr>
           <th>Subreddit</th>
           <th>Description</th>
           <th>Subscribers</th>
+          <th></th>
         </tr>
         {% for sub in redresults %}
           <tr>
-            <td><a href="{{ url_for('splash.sendtosub', sub=sub['name'][3:-1]) }}" target="_blank">{{ sub['name'][:-1] }}</a></td>
+            <td><a href="{{ url_for('splash.sendtosub', sub=sub['name']) }}" target="_blank">{{ sub['name'] }}</a></td>
             <td>{{ sub['description'] }}</td>
-            <td>{{ sub['subscribers'] }}</td>
+            <td>{{ "{:,}".format(sub['subscribers']) }}</td>
+            <td><a class="btn-default btn-sm" href="{{ url_for('splash.subtosub', sub=sub['name']) }}" target="_blank">Subscribe</a></td>
           </tr>
         {% endfor %}
       </table>

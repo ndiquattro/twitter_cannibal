@@ -2,9 +2,10 @@ from flask import Blueprint, render_template, session, redirect, url_for
 from flask import current_app as app
 import tweepy
 import praw
-from app.logic.analysis import analyze_descriptions
-from app.models import User, Clicks
+from app.logic.analysis import analyze_descriptions, validate
+from app.models import User, Clicks, Subscriptions
 from app.logic.search import search_reddit
+from app.logic.data import RedditData
 import datetime
 
 # Register blueprint
@@ -47,12 +48,17 @@ def index():
             # Analyze Descriptions and save to session
             descdat = analyze_descriptions(uinfo.token, uinfo.token_secret)
             topdat = descdat.sort_values('count', ascending=False).head(10)
-            session['topterms'] = topdat.word.tolist()
+            topterms = topdat.word.tolist()
+            session['topterms'] = topterms
             session['timestamp'] = datetime.datetime.now()
 
-        # Get first term
-        fterm = session['topterms'][0]
+            # Validate results
+            validate(topterms, uinfo)
 
+        # Get first term to preload search
+        fterm = session['topterms'][0]
+        # uinfo = User.lookup_user(session['userid'])
+        # validate(session['topterms'], uinfo)
         return redirect(url_for('splash.search', term=fterm))
 
     else:
@@ -88,6 +94,24 @@ def sendtosub(sub):
 
     # Add click to database
     Clicks.add_click(sub, curusr)
+
+    # Construct URL
+    sub_url = 'http://www.reddit.com/r/' + sub
+
+    return redirect(sub_url)
+
+
+@splash.route('/subtosub/<string:sub>')
+def subtosub(sub):
+    # Get user info
+    uobj = User.lookup_user(session['userid'])
+
+    # Set up praw
+    redapi = RedditData(uobj.redtoken, uobj.redrefresh)
+
+    # Subscribe to the subreddit
+    redapi.subscribe(sub)
+    Subscriptions.rec_sub(sub, uobj)
 
     # Construct URL
     sub_url = 'http://www.reddit.com/r/' + sub

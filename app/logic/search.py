@@ -6,7 +6,7 @@ def search_reddit(term):
     headers = {
         'User-Agent': 'Twitter Cannibal 1.0 by /u/box_plot',
     }
-    url = "https://www.reddit.com/subreddits/search.json?q=%s" % term
+    url = "https://www.reddit.com/subreddits/search.json?q=%s&limit=100" % term
     r = requests.get(url, headers=headers)
 
     # Convert to dictionary list
@@ -22,15 +22,17 @@ def search_reddit(term):
 
                 if data['public_description']:
                     desc = data['public_description']
-                elif data['description']:
-                    desc = data['description']
+                # elif data['description']:
+                #     desc = data['description']
                 else:
-                    desc = "No Description :(, you'll have to check it out to see what's what!"
+                    desc = "No Description Provided."
 
                 subs += [{
-                    'name': data['url'],
+                    'url': data['url'],
+                    'name': data['display_name'],
                     'description': desc,
-                    'subscribers': data['subscribers']
+                    'subscribers': data['subscribers'],
+                    'is_subbed': data['user_is_subscriber']
                 }]
 
     # Covert to pands and return

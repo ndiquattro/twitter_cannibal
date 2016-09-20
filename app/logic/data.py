@@ -1,5 +1,6 @@
 from flask import current_app as app
 import tweepy
+import praw
 
 
 class TweetGrabber(object):
@@ -20,6 +21,34 @@ class TweetGrabber(object):
             follows.append(friend.description)
 
         return follows
+
+    def get_descriptions_2levels(self):
+        # Get Friend IDs
+        print self.api.friends_ids()
+        fids = tweepy.Cursor(self.api.friends_ids).items()
+        fid_list = [fid for fid in fids]
+        print len(fid_list)
+
+        # Loop through each friend and get their friend IDs
+        fid_list2 = []
+        for fid in fid_list:
+            for id2 in tweepy.Cursor(self.api.friends_ids, id=fid).items():
+                fid_list2.append(id2)
+
+        # Combine lists
+        all_ids = fid_list + fid_list2
+
+        # Get descriptions from ID list
+        descriptions = []
+        for idx in range(0, len(all_ids), 100):
+            # Get User objects for this chunk
+            chunk_users = self.api.lookup_users(user_ids=all_ids[idx:idx + 100])
+
+            # Get descriptions from this chunk
+            for user in chunk_users:
+                descriptions.append(user.description)
+
+        return descriptions
 
     def get_retweets(self):
         # First get all tweets
@@ -46,3 +75,31 @@ class TweetGrabber(object):
         fav_texts = [f.text for f in favs]
 
         return fav_texts
+
+
+class RedditData(object):
+    def __init__(self, token, retoken):
+        # Initiate praw
+        r = praw.Reddit('Twitter Cannibal 1.0 by /u/box_plot')
+
+        # Set tokens
+        r.set_oauth_app_info(app.config['RDTOKE'], app.config['RDSEC'],
+                             app.config['RDCALL'])
+
+        # Set token
+        r.set_access_credentials("mysubreddits subscribe", token, retoken)
+
+        self.r = r
+
+    def get_subs(self):
+        """ Return list of subreddits of authed user"""
+        sub_obs = [sub for sub in self.r.get_my_subreddits()]
+        sub_names = [sub.display_name for sub in sub_obs]
+
+        return sub_names
+
+    def subscribe(self, sub):
+        """ Subscribe user to a subreddit """
+
+        # Subscribe
+        self.r.get_subreddit(sub).subscribe()
