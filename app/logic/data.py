@@ -25,13 +25,14 @@ class TweetGrabber(object):
 
     def get_descriptions_2levels(self):
         # Get Friend IDs
-        fids = tweepy.Cursor(self.api.friends_ids).items()
-        fid_list = [fid for fid in fids]
+        friend_ids = []
+        for friend in tweepy.Cursor(self.api.friends).items():
+            friend_ids.append(friend.id)
 
         # Loop through each friend and get their friend IDs
-        fid_list = np.random.choice(fid_list, 14, replace=False).tolist()  # Try choosing random friends
+        fid_list = np.random.choice(friend_ids, 15, replace=False).tolist()  # Try choosing random friends
         fid_list2 = []
-        for fid in fid_list[:14]:
+        for fid in fid_list:
             for id2 in tweepy.Cursor(self.api.friends_ids, id=fid).items():
                 fid_list2.append(id2)
 
