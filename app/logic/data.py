@@ -1,4 +1,5 @@
 from flask import current_app as app
+import numpy as np
 import tweepy
 import praw
 
@@ -28,6 +29,7 @@ class TweetGrabber(object):
         fid_list = [fid for fid in fids]
 
         # Loop through each friend and get their friend IDs
+        fid_list = np.random.choice(fid_list, 14, replace=False).tolist()  # Try choosing random friends
         fid_list2 = []
         for fid in fid_list[:14]:
             for id2 in tweepy.Cursor(self.api.friends_ids, id=fid).items():
