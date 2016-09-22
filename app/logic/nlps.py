@@ -88,4 +88,4 @@ def cluster_terms(docs):
     counter = CountVectorizer(ngram_range=(1, 2), stop_words=en_stop)
     term_counts = clust_docs['text'].apply(term_finder, counter)
 
-    return term_counts
+    return term_counts.sort_values('count', ascending=False)

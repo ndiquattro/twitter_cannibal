@@ -14,17 +14,36 @@
     {% endif %}
   {% endwith %}
 
-  {% if authurl %}
-    <a class="btn btn-default btn-lg" href={{ authurl }} role="button">Authenticate Twitter Account</a>
-    <a class="btn btn-default btn-lg" disabled="disabled" href="#" role="button">Authenticate Reddit Account</a>
+  <img class="img-rounded" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"><br>
+  <h1 style="font-family: 'Bungee Inline', serif;">Twitter Cannibal</h1>
+    <h3>Flow:
+  <div class="btn-group" role="group" aria-label="...">
 
-  {% elif raurl %}
-    <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='#' role="button">Authenticate Twitter Account</a>
-    <a class="btn btn-default btn-lg" href={{ raurl }} role="button">Authenticate Reddit Account</a>
+    {% if authurl %}
+      <a class="btn btn-default btn-lg btn-info" href={{ authurl }} role="button">1. Twitter</a>
+      <a class="btn btn-default btn-lg" disabled="disabled" href="" role="button">2. Reddit</a>
+      <a class="btn btn-default btn-lg" disabled="disabled" href="" role="button">3. Go!</a>
 
+    {% elif raurl %}
+      <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">1. Twitter</a>
+      <a class="btn btn-default btn-lg btn-info" href={{ raurl }} role="button">2. Reddit</a>
+      <a class="btn btn-default btn-lg" disabled="disabled" href="" role="button">3. Go!</a>
 
+    {% else %}
+      <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">1. Twitter</a>
+      <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">2. Reddit</a>
+      <a class="btn btn-default btn-lg btn-info" href="{{ url_for('splash.analyze') }}" role="button">3. Go!</a>
   {% endif %}
-  <img class="img-rounded" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}">
-</div>
+ </div></h3>
+  <br>
+  {% if raurl %}
+  <a href="{{ url_for('splash.noreddit') }}">Or: I don't have a reddit account.</a>
+  {% endif %}
+  <a href="{{ url_for('auth.logout') }}">Reset Accounts</a>
+  <br>
+<a class="btn btn-danger btn-xs" data-toggle="popover" title="Reddit Privacy"
+   data-content="Your subreddits are accessed to validate search results. The names of the subreddits are not stored, just the number of matches between the search results and your already subscribed to subreddits. Thanks!">
+  Privacy concerns?</a>
+
 
 {% endblock %}

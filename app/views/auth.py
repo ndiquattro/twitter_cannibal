@@ -80,4 +80,4 @@ def logout():
     session.clear()
 
     # Redirect to home
-    return redirect(url_for('home.index'))
+    return redirect(url_for('splash.index'))

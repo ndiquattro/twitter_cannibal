@@ -40,26 +40,8 @@ def index():
 
             return render_template("splash/index.html", raurl=reddit_aurl)
 
-        # Check if we need to run analysis again
-        if timecheck(session.get('timestamp')):
-            # Reterive user tokens
-            uinfo = User.lookup_user(session['userid'])
-
-            # Analyze Descriptions and save to session
-            descdat = analyze_descriptions(uinfo.token, uinfo.token_secret)
-            topdat = descdat.sort_values('count', ascending=False).head(10)
-            topterms = topdat.word.tolist()
-            session['topterms'] = topterms
-            session['timestamp'] = datetime.datetime.now()
-
-            # Validate results
-            validate(topterms, uinfo)
-
-        # Get first term to preload search
-        fterm = session['topterms'][0]
-        # uinfo = User.lookup_user(session['userid'])
-        # validate(session['topterms'], uinfo)
-        return redirect(url_for('splash.search', term=fterm))
+        # Default ready to go
+        return render_template("splash/index.html")
 
     else:
         # Generate oAuth URL
@@ -117,3 +99,36 @@ def subtosub(sub):
     sub_url = 'http://www.reddit.com/r/' + sub
 
     return redirect(sub_url)
+
+
+@splash.route('/noreddit')
+def noreddit():
+
+    # Set session
+    session['reddit_authed'] = True
+    session['noreddit'] = True
+
+    return redirect(url_for('splash.index'))
+
+
+@splash.route('/analyze')
+def analyze():
+    # Check if we need to run analysis again
+    if timecheck(session.get('timestamp')):
+        # Reterive user tokens
+        uinfo = User.lookup_user(session['userid'])
+
+        # Analyze Descriptions and save to session
+        terms = analyze_descriptions(uinfo.token, uinfo.token_secret)
+        topterms = terms.word.tolist()
+        session['topterms'] = topterms
+        session['timestamp'] = datetime.datetime.now()
+
+        # Validate results
+        if not session.get('noreddit'):
+            validate(topterms, uinfo)
+
+    # Get first term to preload search
+    fterm = session['topterms'][0]
+
+    return redirect(url_for('splash.search', term=fterm))
