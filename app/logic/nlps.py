@@ -58,8 +58,7 @@ def cluster_terms(docs):
     # Label descriptions
     clust_docs = pd.DataFrame(zip(docs, idx))
     clust_docs.columns = ['text', 'cluster']
-    clust_docs = clust_docs.groupby(['cluster'])
-    
+
     del docs
     del idx
 
@@ -106,6 +105,13 @@ def cluster_terms(docs):
 
     # Get Term Frequency for each cluseter
     counter = CountVectorizer(ngram_range=(1, 2), stop_words=en_stop)
-    term_counts = clust_docs['text'].apply(term_finder, counter)
+    # term_counts = clust_docs['text'].apply(term_finder, counter)
+
+    term_counts = []
+    for g, grp in clust_docs.groupby(['cluster']):
+        term_counts.append(term_finder(grp['text'], counter))
+
+    # final result
+    term_counts = pd.concat(term_counts)
 
     return term_counts.sort_values('count', ascending=False)

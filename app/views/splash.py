@@ -130,6 +130,6 @@ def analyze():
             validate(topterms, uinfo)
 
     # Get first term to preload search
-    fterm = topterms[0]
+    fterm = session['topterms'][0]
 
     return redirect(url_for('splash.search', term=fterm))

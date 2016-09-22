@@ -9,11 +9,15 @@ def analyze_descriptions(token, token_secret):
     tw_api = TweetGrabber(token, token_secret)
 
     # Descriptions
+    print 'getting data'
     descriptions = tw_api.get_descriptions_2levels()
+    print 'got data'
 
     # Fit model
     # word_counts = word_bagger(descriptions)
+    print 'starting cluster'
     word_counts = cluster_terms(descriptions)
+    print 'got clusters'
 
     return word_counts
 
@@ -24,6 +28,7 @@ def validate(terms, uobj):
     user_subs = set(rinfo.get_subs())
 
     for term in terms:
+        print 'validating %s' % term
         # Search and parse
         results = search_reddit(term)
         names_results = [sub['name'] for sub in results]
