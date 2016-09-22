@@ -24,6 +24,7 @@ class TweetGrabber(object):
         return follows
 
     def get_descriptions_2levels(self):
+
         # Get Friend IDs
         friend_ids = []
         for friend in tweepy.Cursor(self.api.friends).items():

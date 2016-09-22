@@ -120,6 +120,7 @@ def analyze():
 
         # Analyze Descriptions and save to session
         terms = analyze_descriptions(uinfo.token, uinfo.token_secret)
+
         topterms = terms.word.tolist()
         session['topterms'] = topterms
         session['timestamp'] = datetime.datetime.now()
