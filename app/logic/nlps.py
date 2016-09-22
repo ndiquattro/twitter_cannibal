@@ -68,19 +68,25 @@ def cluster_terms(docs):
 
         word_counts = []
         for tag, count in zip(vocab, dist):
-            word_counts += [{'count': count, 'word': tag}]
+            word_counts += [{'count': count, 'word': tag,
+                             'gram': len(tag.split())}]
 
-        word_counts = pd.DataFrame.from_dict(word_counts)
-        word_counts = word_counts.sort_values('count', ascending=False)
+        # Sort by counts
+        word_counts = sorted(word_counts, key=lambda k: k['count'], reverse=True)
 
         # Get top unigrams and bigrams
-        unis = word_counts[
-            word_counts.word.apply(lambda x: len(x.split()) == 1)].head(2)
-        bis = word_counts[
-            word_counts.word.apply(lambda x: len(x.split()) == 2)].head(2)
+        unis = []
+        bis = []
+        for row in word_counts:
+            if row['gram'] == 1 and len(unis) < 2:
+                unis.append(row)
+            elif row['gram'] == 2 and len(bis) < 2:
+                bis.append(row)
+            else:
+                break
 
         # Combine
-        topdf = pd.concat([unis, bis])
+        topdf = unis + bis
 
         return topdf
 
