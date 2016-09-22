@@ -52,10 +52,16 @@ def cluster_terms(docs):
     km = KMeans(n_clusters=5)
     idx = km.fit_predict(counts)
 
+    # Free up space
+    del counts
+
     # Label descriptions
     clust_docs = pd.DataFrame(zip(docs, idx))
     clust_docs.columns = ['text', 'cluster']
     clust_docs = clust_docs.groupby(['cluster'])
+    
+    del docs
+    del idx
 
     # Term Finder
     def term_finder(docs, counter):
@@ -68,19 +74,33 @@ def cluster_terms(docs):
 
         word_counts = []
         for tag, count in zip(vocab, dist):
-            word_counts += [{'count': count, 'word': tag}]
+            word_counts += [{'count': count, 'word': tag,
+                             'gram': len(tag.split())}]
 
-        word_counts = pd.DataFrame.from_dict(word_counts)
-        word_counts = word_counts.sort_values('count', ascending=False)
+        # Free up space
+        del counts
+        del vocab
+        del dist
+
+        # Sort by counts
+        word_counts = sorted(word_counts, key=lambda k: k['count'], reverse=True)
 
         # Get top unigrams and bigrams
-        unis = word_counts[
-            word_counts.word.apply(lambda x: len(x.split()) == 1)].head(2)
-        bis = word_counts[
-            word_counts.word.apply(lambda x: len(x.split()) == 2)].head(2)
+        unis = []
+        bis = []
+        for row in word_counts:
+            if row['gram'] == 1 and len(unis) < 2:
+                unis.append(row)
+            elif row['gram'] == 2 and len(bis) < 2:
+                bis.append(row)
+            else:
+                break
+
+        # Free up space
+        del word_counts
 
         # Combine
-        topdf = pd.concat([unis, bis])
+        topdf = pd.DataFrame(unis + bis)
 
         return topdf
 
