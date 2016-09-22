@@ -1,40 +1,72 @@
 {% extends "base.html" %}
 {% block title %}Twitter Cannibal!{% endblock %}
 {% block content %}
-
-
-
-<div class ='col-md-10 col-md-offset-1'>
-  <div class="row">
-
+<div class="col-md-12">
+  <div class="text-left">
+    <h1 style="font-family: 'Bungee Inline', serif;">Twitter Cannibal<img class="img-rounded text-right" height="50px" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"></h1>
+  </div>
+</div>
+<div class="row">
+<div class ='col-md-11 col-md-offset-1'>
     <div class="col-md-2">
-      <!-- Terms Table -->
-      <table class="table">
+    <div class="panel panel-default panel-primary">
+    <div class="panel-heading">Interests</div>
+      <div class="list-group">
         {% for term in terms %}
-        <tr><td><a href={{ url_for('splash.search', term=term) }}>{{ term }}</a></td></tr>
+        <button type="button" class="list-group-item"><a class="text-center text-capitalize" href={{ url_for('splash.search', term=term) }}>{{ term }}</a></button>
         {% endfor %}
-      </table>
+      </div>
+      </div>
     </div>
 
     <div class="col-md-10">
-      <table class="table">
+    {% set row_class = cycler('1', '2', '3') %}
+    {% for sub in redresults %}
+      {% if row_class.next() == '1' %}
+        <div class="row">
+      {% endif %}
+
+      <div class="col-md-3">
+         <div class="panel panel-default panel-info">
+          <div class="panel-heading"><h3 class="panel-title"><a href="{{ url_for('splash.sendtosub', sub=sub['name']) }}" target="_blank">{{ 'r/{}'.format(sub['name']) }}</a></h3></div>
+            <div class="panel-body">
+              {{ sub['description'] }}
+              <br>
+              <br>
+              <div class="text-right"><em>{{ "{:,} Subscribers".format(sub['subscribers']) }}</em></div>
+            </div>
+           <div class="panel-footer text-center"><a class="btn btn-default" href="{{ url_for('splash.subtosub', sub=sub['name']) }}" target="_blank">Subscribe</a></div>
+         </div>
+      </div>
+      {% if row_class.next() == '3' or loop.last %}
+        </div>
+        <br>
+        <br>
+        <br>
+      {% endif %}
+    {% endfor %}
+
+
+
+      <table class="table table-hover">
+      <thead>
         <tr>
-          <th>Subreddit</th>
+          <th>Subreddits</th>
           <th>Description</th>
           <th>Subscribers</th>
           <th></th>
         </tr>
+      </thead>
         {% for sub in redresults %}
           <tr>
-            <td><a href="{{ url_for('splash.sendtosub', sub=sub['name']) }}" target="_blank">{{ sub['name'] }}</a></td>
+            <td class="text-center"><a href="{{ url_for('splash.sendtosub', sub=sub['name']) }}" target="_blank">{{ sub['name'] }}</a></td>
             <td>{{ sub['description'] }}</td>
-            <td>{{ "{:,}".format(sub['subscribers']) }}</td>
-            <td><a class="btn-default btn-sm" href="{{ url_for('splash.subtosub', sub=sub['name']) }}" target="_blank">Subscribe</a></td>
+            <td class="text-center">{{ "{:,}".format(sub['subscribers']) }}</td>
+            <td class="text-center"><a class="btn-default btn-sm" href="{{ url_for('splash.subtosub', sub=sub['name']) }}" target="_blank">Subscribe</a></td>
           </tr>
         {% endfor %}
       </table>
     </div>
-  </div>
 </div>
-
+</div>
 {% endblock %}

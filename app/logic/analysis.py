@@ -1,5 +1,5 @@
 from data import TweetGrabber, RedditData
-from nlps import word_bagger
+from nlps import word_bagger, cluster_terms
 from search import search_reddit
 from app.models import Stats
 
@@ -12,7 +12,8 @@ def analyze_descriptions(token, token_secret):
     descriptions = tw_api.get_descriptions_2levels()
 
     # Fit model
-    word_counts = word_bagger(descriptions)
+    # word_counts = word_bagger(descriptions)
+    word_counts = cluster_terms(descriptions)
 
     return word_counts
 
