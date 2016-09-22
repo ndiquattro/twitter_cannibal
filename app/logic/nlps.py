@@ -52,10 +52,16 @@ def cluster_terms(docs):
     km = KMeans(n_clusters=5)
     idx = km.fit_predict(counts)
 
+    # Free up space
+    del counts
+
     # Label descriptions
     clust_docs = pd.DataFrame(zip(docs, idx))
     clust_docs.columns = ['text', 'cluster']
     clust_docs = clust_docs.groupby(['cluster'])
+    
+    del docs
+    del idx
 
     # Term Finder
     def term_finder(docs, counter):
@@ -71,6 +77,11 @@ def cluster_terms(docs):
             word_counts += [{'count': count, 'word': tag,
                              'gram': len(tag.split())}]
 
+        # Free up space
+        del counts
+        del vocab
+        del dist
+
         # Sort by counts
         word_counts = sorted(word_counts, key=lambda k: k['count'], reverse=True)
 
@@ -85,8 +96,11 @@ def cluster_terms(docs):
             else:
                 break
 
+        # Free up space
+        del word_counts
+
         # Combine
-        topdf = unis + bis
+        topdf = pd.DataFrame(unis + bis)
 
         return topdf
 
