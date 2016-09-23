@@ -4,7 +4,7 @@ from app import db
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(400), unique=False)
-    twitterid = db.Column(db.String(400), index=True, unique=True)
+    twitterid = db.Column(db.Integer, index=True, unique=True)
     token = db.Column(db.String(400))
     token_secret = db.Column(db.String(400))
     redtoken = db.Column(db.String(400))
