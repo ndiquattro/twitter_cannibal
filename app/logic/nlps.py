@@ -20,7 +20,7 @@ def word_bagger(tlist):
         newdoc.append(casual.remove_handles(doc))
 
     # Initialize algo
-    counter = CountVectorizer(ngram_range=(1, 3), stop_words=en_stop, min_df=4)
+    counter = CountVectorizer(ngram_range=(1, 2), stop_words=en_stop, min_df=4)
 
     # Fit the model
     counts = counter.fit_transform(newdoc).toarray()
@@ -82,7 +82,8 @@ def cluster_terms(docs):
         del dist
 
         # Sort by counts
-        word_counts = sorted(word_counts, key=lambda k: k['count'], reverse=True)
+        word_counts = sorted(word_counts, key=lambda k: k['count'],
+                             reverse=True)
 
         # Get top unigrams and bigrams
         unis = []
@@ -104,7 +105,8 @@ def cluster_terms(docs):
         return topdf
 
     # Get Term Frequency for each cluseter
-    counter = CountVectorizer(ngram_range=(1, 2), stop_words=en_stop)
+    counter = CountVectorizer(ngram_range=(1, 2), stop_words=en_stop,
+                              max_features=50, min_df=4)
     # term_counts = clust_docs['text'].apply(term_finder, counter)
 
     term_counts = []

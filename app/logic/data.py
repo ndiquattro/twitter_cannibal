@@ -27,14 +27,14 @@ class TweetGrabber(object):
 
         # Get Friend IDs
         friend_ids = []
-        for friend in tweepy.Cursor(self.api.friends).items():
+        for friend in tweepy.Cursor(self.api.friends).items(300):
             friend_ids.append(friend.id)
 
         # Loop through each friend and get their friend IDs
         fid_list = np.random.choice(friend_ids, 15, replace=False).tolist()  # Try choosing random friends
         fid_list2 = []
         for fid in fid_list:
-            for id2 in tweepy.Cursor(self.api.friends_ids, id=fid).items():
+            for id2 in tweepy.Cursor(self.api.friends_ids, id=fid).items(5000):
                 fid_list2.append(id2)
 
         # Combine lists
@@ -42,13 +42,19 @@ class TweetGrabber(object):
 
         # Get descriptions from ID list
         descriptions = []
+        loop_count = 0
         for idx in range(0, len(all_ids), 100):
+            # Make sure we don't request too many times
+            if loop_count > 180:
+                break
             # Get User objects for this chunk
             chunk_users = self.api.lookup_users(user_ids=all_ids[idx:idx + 100])
 
             # Get descriptions from this chunk
             for user in chunk_users:
                 descriptions.append(user.description)
+
+            loop_count += 1
 
         return descriptions
 
