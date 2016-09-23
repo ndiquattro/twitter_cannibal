@@ -3,12 +3,12 @@ from app import db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), unique=False)
+    name = db.Column(db.String(400), unique=False)
     twitterid = db.Column(db.Integer, index=True, unique=True)
-    token = db.Column(db.String(120), unique=True)
-    token_secret = db.Column(db.String(120), unique=True)
-    redtoken = db.Column(db.String(120), unique=True)
-    redrefresh = db.Column(db.String(120), unique=True)
+    token = db.Column(db.String(400))
+    token_secret = db.Column(db.String(400))
+    redtoken = db.Column(db.String(400))
+    redrefresh = db.Column(db.String(400))
     clicks = db.relationship('Clicks', backref='twuser', lazy='dynamic')
     stats = db.relationship('Stats', backref='twuser', lazy='dynamic')
     subscriptions = db.relationship('Subscriptions', backref='twuser',

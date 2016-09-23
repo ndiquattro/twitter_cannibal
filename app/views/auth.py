@@ -60,6 +60,7 @@ def authreddit():
     # Get tokens
     cbacktoken = request.args.get('code')
     access_info = r.get_access_information(cbacktoken)
+    print access_info
 
     # Add info to database
     curusr = models.User.lookup_user(session['userid'])
