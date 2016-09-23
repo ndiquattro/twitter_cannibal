@@ -27,8 +27,9 @@ class TweetGrabber(object):
 
         # Get Friend IDs
         friend_ids = []
-        for friend in tweepy.Cursor(self.api.friends).items(300):
-            friend_ids.append(friend.id)
+        for page in tweepy.Cursor(self.api.friends).pages():
+            for friend in page:
+                friend_ids.append(friend.id)
 
         # Loop through each friend and get their friend IDs
         fid_list = np.random.choice(friend_ids, 15, replace=False).tolist()  # Try choosing random friends
