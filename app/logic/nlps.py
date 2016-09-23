@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from nltk.corpus import stopwords
 from nltk.tokenize import casual
+import gc
 
 # Construct stopwords
 custom_stop = ['http', 'https', 'co', 'rt', 'like', 'official', 'twitter',
@@ -104,12 +105,15 @@ def cluster_terms(docs):
         return topdf
 
     # Get Term Frequency for each cluseter
-    counter = CountVectorizer(ngram_range=(1, 2), stop_words=en_stop)
+    counter = CountVectorizer(ngram_range=(1, 2), stop_words=en_stop, max_features = 50)
     # term_counts = clust_docs['text'].apply(term_finder, counter)
 
     term_counts = []
     for g, grp in clust_docs.groupby(['cluster']):
-        term_counts.append(term_finder(grp['text'], counter))
+	terms = term_finder(grp['text'], counter)
+        term_counts.append(terms)
+	del terms
+	gc.collect()
 
     # final result
     term_counts = pd.concat(term_counts)
