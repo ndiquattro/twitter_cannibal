@@ -41,7 +41,7 @@ class TweetGrabber(object):
         for fid in fid_list:
             print 'Scraping Friend {}'.format(counter)
             counter += 1
-            fof = tweepy.Cursor(self.api.friends_ids, id=fid, count=5000).pages()
+            fof = tweepy.Cursor(self.api.friends_ids, id=fid, count=5000).pages(1)
             for page in fof:
                 print 'Total friends of {}: {}'.format(counter, len(page))
                 for id2 in page:

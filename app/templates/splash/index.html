@@ -2,7 +2,15 @@
 {% block title %}Twitter Cannibal!{% endblock %}
 {% block content %}
 
-
+<style>div#loading {
+    width: 120px;
+    height: 120px;
+    margin-left:auto;
+    margin-right:auto;
+    display: none;
+    background: url({{ url_for('static', filename='images/ajax-loader.gif') }}) no-repeat;
+    cursor: wait;
+    }</style>
 
 <div class ='col-md-6 col-md-offset-3 text-center'>
   <!--Status message updates-->
@@ -16,7 +24,8 @@
 
   <img class="img-rounded" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"><br>
   <h1 style="font-family: 'Bungee Inline', serif;">Twitter Cannibal</h1>
-    <h3>Flow:
+  <div id="content">
+    <h3>
   <div class="btn-group" role="group" aria-label="...">
 
     {% if authurl %}
@@ -32,7 +41,7 @@
     {% else %}
       <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">1. Twitter</a>
       <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">2. Reddit</a>
-      <a class="btn btn-default btn-lg btn-info" href="{{ url_for('splash.analyze') }}" role="button">3. Go!</a>
+      <a class="btn btn-default btn-lg btn-info" href="{{ url_for('splash.analyze') }}" role="button" onclick="loading();">3. Go!</a>
   {% endif %}
  </div></h3>
   <br>
@@ -44,6 +53,13 @@
 <a class="btn btn-danger btn-xs" data-toggle="popover" title="Reddit Privacy"
    data-content="Your subreddits are accessed to validate search results. The names of the subreddits are not stored, just the number of matches between the search results and your already subscribed to subreddits. Thanks!">
   Privacy concerns?</a>
+  </div>
+  <div id="loading" class="text-center"></div>
 
-
+<script type="text/javascript">// <![CDATA[
+        function loading(){
+            $("#loading").show();
+            $("#content").hide();
+        }
+// ]]></script>
 {% endblock %}

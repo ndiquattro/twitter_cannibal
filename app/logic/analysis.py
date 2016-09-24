@@ -26,12 +26,15 @@ def validate(terms, uobj):
     # Get current user's subreddits
     rinfo = RedditData(uobj.redtoken, uobj.redrefresh)
     user_subs = set(rinfo.get_subs())
+    print 'user subs: {}'.format(user_subs)
+    all_subs = []
 
     for term in terms:
         print 'validating %s' % term
         # Search and parse
         results = search_reddit(term)
         names_results = [sub['name'] for sub in results]
+        [all_subs.append(sub) for sub in names_results]
         sub_matches = user_subs.intersection(names_results)
 
         # Make results object
@@ -40,6 +43,12 @@ def validate(terms, uobj):
 
         # Save to database
         Stats.add_data(res_ob, uobj)
+
+    # Find number of user subs that matched
+    print user_subs
+    all_matches = user_subs.intersection(all_subs)
+    Stats.add_data({'term': 'allsubs', 'num_results': len(user_subs),
+                    'num_matches': len(all_matches)}, uobj)
 
 
 def analyze_retweets(token, token_secret):

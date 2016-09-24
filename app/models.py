@@ -4,7 +4,7 @@ from app import db
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(400), unique=False)
-    twitterid = db.Column(db.Integer, index=True, unique=True)
+    twitterid = db.Column(db.String(400), index=True, unique=True)
     token = db.Column(db.String(400))
     token_secret = db.Column(db.String(400))
     redtoken = db.Column(db.String(400))
@@ -47,7 +47,7 @@ class User(db.Model):
 class Clicks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subname = db.Column(db.String(400))
-    userid = db.Column(db.Integer, db.ForeignKey('user.twitterid'))
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     @staticmethod
     def add_click(subname, uobject):
@@ -57,7 +57,7 @@ class Clicks(db.Model):
 
 class Stats(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('user.twitterid'))
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'))
     term = db.Column(db.String(400))
     num_results = db.Column(db.Integer)
     num_matches = db.Column(db.Integer)
@@ -73,7 +73,7 @@ class Stats(db.Model):
 
 class Subscriptions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('user.twitterid'))
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'))
     subreddit = db.Column(db.String(400))
 
     @staticmethod
