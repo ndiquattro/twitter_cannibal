@@ -31,6 +31,8 @@ def authuser():
     # Save session
     session.permanent = True
     session['userid'] = uinfo.id
+    print 'From Twitter ID: {}'.format(uinfo.id)
+    print 'In session ID: {}'.format(session['userid'])
 
     # Add user to database
     # Check if we've already authed before

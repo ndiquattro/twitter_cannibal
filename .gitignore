@@ -1,6 +1,6 @@
 # Server side variables
 simple.conf
-run.py
+/run.py
 supervisord.pid
 
 # Pycharm folder

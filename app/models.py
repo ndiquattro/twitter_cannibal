@@ -33,7 +33,7 @@ class User(db.Model):
 
     @staticmethod
     def lookup_user(uid):
-        return User.query.filter_by(twitterid=uid).one()
+        return User.query.filter_by(twitterid=uid).first()
 
     @staticmethod
     def users_list():
