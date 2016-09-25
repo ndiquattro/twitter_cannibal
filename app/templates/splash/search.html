@@ -48,24 +48,6 @@
 
 
 
-      <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Subreddits</th>
-          <th>Description</th>
-          <th>Subscribers</th>
-          <th></th>
-        </tr>
-      </thead>
-        {% for sub in redresults %}
-          <tr>
-            <td class="text-center"><a href="{{ url_for('splash.sendtosub', sub=sub['name']) }}" target="_blank">{{ sub['name'] }}</a></td>
-            <td>{{ sub['description'] }}</td>
-            <td class="text-center">{{ "{:,}".format(sub['subscribers']) }}</td>
-            <td class="text-center"><a class="btn-default btn-sm" href="{{ url_for('splash.subtosub', sub=sub['name']) }}" target="_blank">Subscribe</a></td>
-          </tr>
-        {% endfor %}
-      </table>
     </div>
 </div>
 </div>

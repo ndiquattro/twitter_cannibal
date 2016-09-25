@@ -8,13 +8,13 @@ import gc
 
 # Construct stopwords
 custom_stop = ['http', 'https', 'co', 'rt', 'like', 'official', 'twitter',
-               'account', 'tweets', 'follow', 'gmail']
+               'account', 'tweets', 'follow', 'gmail', 'com', 'net', 'org',
+               'www']
 en_stop = set(stopwords.words("english")).union(custom_stop)
 
 
 # Bag of words
 def word_bagger(tlist):
-
     # Take out twitter handles
     newdoc = []
     for doc in tlist:
@@ -112,10 +112,10 @@ def cluster_terms(docs):
 
     term_counts = []
     for g, grp in clust_docs.groupby(['cluster']):
-	terms = term_finder(grp['text'], counter)
+        terms = term_finder(grp['text'], counter)
         term_counts.append(terms)
-	del terms
-	gc.collect()
+        del terms
+        gc.collect()
 
     # final result
     term_counts = pd.concat(term_counts)
