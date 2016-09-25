@@ -3,17 +3,21 @@
 {% block content %}
 <div class="col-md-12">
   <div class="text-left">
-    <h1 style="font-family: 'Bungee Inline', serif;">Twitter Cannibal<img class="img-rounded text-right" height="50px" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"></h1>
+    <h1 style="font-family: 'Freckle Face', serif;">Twitter Cannibal<a href="/"><img class="img-rounded text-right" height="50px" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"></a></h1>
   </div>
 </div>
 <div class="row">
 <div class ='col-md-11 col-md-offset-1'>
     <div class="col-md-2">
-    <div class="panel panel-default panel-primary">
-    <div class="panel-heading">Interests</div>
+    <div class="panel panel-default panel-warning">
       <div class="list-group">
         {% for term in terms %}
-        <button type="button" class="list-group-item"><a class="text-center text-capitalize" href={{ url_for('splash.search', term=term) }}>{{ term }}</a></button>
+          {% if term == curterm %}
+        <button type="button" class="list-group-item active">
+        {% else %}
+          <button type="button" class="list-group-item">
+          {% endif %}
+          <a class="text-center text-capitalize" href={{ url_for('splash.search', term=term) }}>{{ term }}</a></button>
         {% endfor %}
       </div>
       </div>
@@ -27,7 +31,7 @@
       {% endif %}
 
       <div class="col-md-3">
-         <div class="panel panel-default panel-info">
+         <div class="panel panel-default panel-primary">
           <div class="panel-heading"><h3 class="panel-title"><a href="{{ url_for('splash.sendtosub', sub=sub['name']) }}" target="_blank">{{ 'r/{}'.format(sub['name']) }}</a></h3></div>
             <div class="panel-body">
               {{ sub['description'] }}
@@ -35,7 +39,13 @@
               <br>
               <div class="text-right"><em>{{ "{:,} Subscribers".format(sub['subscribers']) }}</em></div>
             </div>
-           <div class="panel-footer text-center"><a class="btn btn-default" href="{{ url_for('splash.subtosub', sub=sub['name']) }}" target="_blank">Subscribe</a></div>
+           <div class="panel-footer text-center">
+             {% if noreddit %}
+             <a class="btn btn-default" disabled="disabled" href="#">Subscribe</a>
+             {% else %}
+             <a class="btn btn-default" href="{{ url_for('splash.subtosub', sub=sub['name']) }}" target="_blank">Subscribe</a>
+             {% endif %}
+           </div>
          </div>
       </div>
       {% if row_class.next() == '3' or loop.last %}

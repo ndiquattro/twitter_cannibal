@@ -2,65 +2,114 @@
 {% block title %}Twitter Cannibal!{% endblock %}
 {% block content %}
 
-<style>div#loading {
-    width: 120px;
-    height: 120px;
-    margin-left:auto;
-    margin-right:auto;
-    display: none;
-    background: url({{ url_for('static', filename='images/ajax-loader.gif') }}) no-repeat;
-    cursor: wait;
-    }</style>
+  <style>div#loading {
+{#    width: 120px;#}
+{#    height: 120px;#}
+{#    margin-left: auto;#}
+{#    margin-right: auto;#}
+{#    display: none;#}
+{#    background: url({{ url_for('static', filename='images/ajax-loader.gif') }}) no-repeat;#}
+{#    cursor: wait;#}
+  }</style>
 
-<div class ='col-md-6 col-md-offset-3 text-center'>
-  <!--Status message updates-->
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
+  <div class='col-md-6 col-md-offset-3 text-center'>
+    <!--Status message updates-->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
         {% for message in messages %}
           <div class="alert alert-success" role="alert">{{ message }}</div>
         {% endfor %}
-    {% endif %}
-  {% endwith %}
+      {% endif %}
+    {% endwith %}
 
-  <img class="img-rounded" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"><br>
-  <h1 style="font-family: 'Bungee Inline', serif;">Twitter Cannibal</h1>
-  <div id="content">
-    <h3>
-  <div class="btn-group" role="group" aria-label="...">
+    <img class="img-rounded"
+         src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"><br>
+    <h1 style="font-family: 'Freckle Face', serif;">Twitter Cannibal</h1>
+    <div id="content">
 
-    {% if authurl %}
-      <a class="btn btn-default btn-lg btn-info" href={{ authurl }} role="button">1. Twitter</a>
-      <a class="btn btn-default btn-lg" disabled="disabled" href="" role="button">2. Reddit</a>
-      <a class="btn btn-default btn-lg" disabled="disabled" href="" role="button">3. Go!</a>
+        <div class="btn-group" role="group" aria-label="...">
+          {% if authurl %}
 
-    {% elif raurl %}
-      <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">1. Twitter</a>
-      <a class="btn btn-default btn-lg btn-info" href={{ raurl }} role="button">2. Reddit</a>
-      <a class="btn btn-default btn-lg" disabled="disabled" href="" role="button">3. Go!</a>
+            <a class="btn btn-default btn-lg btn-info"
+               href={{ authurl }} role="button"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i></a>
 
-    {% else %}
-      <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">1. Twitter</a>
-      <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">2. Reddit</a>
-      <a class="btn btn-default btn-lg btn-info" href="{{ url_for('splash.analyze') }}" role="button" onclick="loading();">3. Go!</a>
-  {% endif %}
- </div>
-  </h3>
-  <br>
-  {% if raurl %}
-  <a href="{{ url_for('splash.noreddit') }}">Or: I don't have a reddit account.</a><br><br>
-  {% endif %}
-  <a href="{{ url_for('auth.logout') }}">Reset Accounts</a>
-  <br><br>
-<a class="btn btn-danger btn-xs" data-toggle="popover" title="Reddit Privacy"
-   data-content="Your subreddits are accessed to validate search results. The names of the subreddits are not stored, just the number of matches between the search results and your already subscribed to subreddits. Thanks!">
-  Privacy concerns?</a>
+{#            <a class="btn btn-default btn-lg" disabled="disabled" href=""#}
+{#               role="button">2. Reddit</a>#}
+{#            <a class="btn btn-default btn-lg" disabled="disabled" href=""#}
+{#               role="button">3. Go!</a>#}
+
+          {% elif raurl %}
+            <a class="btn btn-default btn-success btn-lg" disabled="disabled"
+               href='' role="button"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i></a>
+            <a class="btn btn-default btn-lg btn-info"
+               href={{ raurl }} role="button"><i class="fa fa-reddit-alien fa-2x" aria-hidden="true"></i></a>
+{#            <a class="btn btn-default btn-lg" disabled="disabled" href=""#}
+{#               role="button">3. Go!</a>#}
+
+          {% else %}
+            <a class="btn btn-default btn-success btn-lg" disabled="disabled"
+               href='' role="button"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i></a>
+            <a class="btn btn-default btn-success btn-lg" disabled="disabled"
+               href='' role="button"><i class="fa fa-reddit-alien fa-2x" aria-hidden="true"></i></a>
+            <a class="btn btn-default btn-lg btn-info"
+               href="{{ url_for('splash.analyze') }}" role="button"
+               onclick="loading();"><i class="fa fa-sign-in fa-2x" aria-hidden="true"></i></a>
+          {% endif %}
+        </div>
+      <br>
+      {% if raurl %}
+        <a href="{{ url_for('splash.noreddit') }}">I don't have a reddit
+          account.</a><br><br>
+      {% endif %}
+    Click icons to authenticate and get started!<br>
+      <a href="{{ url_for('auth.logout') }}">Reset Accounts</a>
+      <br><br>
+      <a class="btn btn-danger btn-xs" data-toggle="popover"
+         title="Reddit Privacy"
+         data-content="Your subreddits are accessed to validate search results. The names of your subreddits are not stored, just the number of matches between the search results and your already subscribed to subreddits. Thanks!">
+        Privacy concerns?</a>
+    </div>
+
+    <div id="loading" class="text-center" style="display:none;">
+      <div class="btn-group" role="group" aria-label="...">
+                  <a class="btn btn-default btn-success btn-lg" disabled="disabled"
+               href='' role="button"><i class="fa fa-twitter fa-spin fa-2x" aria-hidden="true"></i></a>
+            <a class="btn btn-default btn-success btn-lg" disabled="disabled"
+               href='' role="button"><i class="fa fa-reddit-alien fa-2x fa-spin" aria-hidden="true"></i></a>
+            <a class="btn btn-default btn-lg btn-info" disabled="disabled"
+               href="{{ url_for('splash.analyze') }}" role="button"
+               onclick="loading();"><i class="fa fa-sign-in fa-2x" aria-hidden="true"></i></a>
+        </div>
+      Loading...
+    </div>
   </div>
-  <div id="loading" class="text-center"></div>
+
+<div class="row">
+  <div class="col-md-5 col-md-offset-4">
+      <br>
+    <br>
+    Introduction
+    <hr>
+    <p>
+      Twitter Cannibal is a tool for discovering new subreddits you didn't even
+      know you would like.
+      By analyzing who you follow on Twitter, it searches for subreddits that you will want to subscribe too.
+      This doubles your enjoyment out of life. Or, at least, will make Reddit
+      more fun.
+    </p>
+
+    Created by: <a href="https://www.linkedin.com/in/ndiquattro" target="_blank">Nick DiQuattro</a> |
+    Artwork by: <a href="https://www.instagram.com/dylan_quest/" target="_blank">Dylan Quest</a>
+    <br>
+    <br>
+    <br>
+  </div>
 </div>
-<script type="text/javascript">// <![CDATA[
-        function loading(){
-            $("#loading").show();
-            $("#content").hide();
-        }
-// ]]></script>
+
+  <script type="text/javascript">// <![CDATA[
+  function loading() {
+    $("#loading").show();
+    $("#content").hide();
+  }
+  // ]]></script>
 {% endblock %}

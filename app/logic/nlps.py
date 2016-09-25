@@ -9,7 +9,7 @@ import gc
 # Construct stopwords
 custom_stop = ['http', 'https', 'co', 'rt', 'like', 'official', 'twitter',
                'account', 'tweets', 'follow', 'gmail', 'com', 'net', 'org',
-               'www']
+               'www', 'new']
 en_stop = set(stopwords.words("english")).union(custom_stop)
 
 
@@ -92,16 +92,25 @@ def cluster_terms(docs):
         for row in word_counts:
             if row['gram'] == 1 and len(unis) < 2:
                 unis.append(row)
-            elif row['gram'] == 2 and len(bis) < 2:
+
+            if len(unis) > 2:
+                break
+
+        for row in word_counts:
+            if row['gram'] == 2 and len(bis) < 2:
                 bis.append(row)
-            else:
+
+            if len(bis) > 2:
                 break
 
         # Free up space
         del word_counts
 
         # Combine
+        print unis
+        print bis
         topdf = pd.DataFrame(unis + bis)
+        print topdf
 
         return topdf
 
@@ -119,5 +128,6 @@ def cluster_terms(docs):
 
     # final result
     term_counts = pd.concat(term_counts)
+    print term_counts
 
     return term_counts.sort_values('count', ascending=False)

@@ -65,8 +65,11 @@ def search(term):
     # Found terms
     topterms = session['topterms']
 
+    # Reddit account check
+    noreddit = session.get('noreddit')
+
     return render_template("splash/search.html", redresults=search_results,
-                           terms=topterms)
+                           terms=topterms, noreddit=noreddit, curterm=term)
 
 
 @splash.route('/sendtosub/<string:sub>')
