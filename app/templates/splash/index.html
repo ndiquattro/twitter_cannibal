@@ -43,19 +43,20 @@
       <a class="btn btn-default btn-success btn-lg" disabled="disabled" href='' role="button">2. Reddit</a>
       <a class="btn btn-default btn-lg btn-info" href="{{ url_for('splash.analyze') }}" role="button" onclick="loading();">3. Go!</a>
   {% endif %}
- </div></h3>
+ </div>
+  </h3>
   <br>
   {% if raurl %}
-  <a href="{{ url_for('splash.noreddit') }}">Or: I don't have a reddit account.</a>
+  <a href="{{ url_for('splash.noreddit') }}">Or: I don't have a reddit account.</a><br><br>
   {% endif %}
   <a href="{{ url_for('auth.logout') }}">Reset Accounts</a>
-  <br>
+  <br><br>
 <a class="btn btn-danger btn-xs" data-toggle="popover" title="Reddit Privacy"
    data-content="Your subreddits are accessed to validate search results. The names of the subreddits are not stored, just the number of matches between the search results and your already subscribed to subreddits. Thanks!">
   Privacy concerns?</a>
   </div>
   <div id="loading" class="text-center"></div>
-
+</div>
 <script type="text/javascript">// <![CDATA[
         function loading(){
             $("#loading").show();
