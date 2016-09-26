@@ -17,12 +17,12 @@
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for message in messages %}
-          <div class="alert alert-success" role="alert">{{ message }}</div>
+          <div class="alert alert-success" role="alert" style="color:black;">{{ message }}</div>
         {% endfor %}
       {% endif %}
     {% endwith %}
 
-    <img class="img-rounded"
+    <img class="img-rounded" height="300"
          src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"><br>
     <h1 style="font-family: 'Freckle Face', serif;">Twitter Cannibal</h1>
     <div id="content">
