@@ -9,7 +9,7 @@ import gc
 # Construct stopwords
 custom_stop = ['http', 'https', 'co', 'rt', 'like', 'official', 'twitter',
                'account', 'tweets', 'follow', 'gmail', 'com', 'net', 'org',
-               'www', 'new']
+               'www', 'new', 'love', 'things']
 en_stop = set(stopwords.words("english")).union(custom_stop)
 
 

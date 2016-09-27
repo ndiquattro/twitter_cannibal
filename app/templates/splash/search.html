@@ -3,13 +3,14 @@
 {% block content %}
 <div class="col-md-12">
   <div class="text-left">
-    <h1 style="font-family: 'Freckle Face', serif;">Twitter Cannibal<a href="/"><img class="img-rounded text-right" height="50px" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"></a></h1>
+    <h1 style="font-family: 'Freckle Face', serif;">Twitter Cannibal&nbsp;&nbsp;<a href="/"><img class="img-rounded text-right" height="50px" src="{{ url_for('static', filename="images/twitter_cannibal.svg") }}"></a></h1>
   </div>
 </div>
 <div class="row">
 <div class ='col-md-11 col-md-offset-1'>
     <div class="col-md-2">
-    <div class="panel panel-default panel-warning">
+    <div class="panel panel-warning">
+      <div class="panel-heading panel-warning"><h2 class="panel-title text-center panel-warning">Topics</h2></div>
       <div class="list-group">
         {% for term in terms %}
           {% if term == curterm %}
@@ -31,7 +32,7 @@
       {% endif %}
 
       <div class="col-md-3">
-         <div class="panel panel-default panel-primary">
+         <div class="panel panel-info">
           <div class="panel-heading"><h3 class="panel-title"><a href="{{ url_for('splash.sendtosub', sub=sub['name']) }}" target="_blank">{{ 'r/{}'.format(sub['name']) }}</a></h3></div>
             <div class="panel-body">
               {{ sub['description'] }}
