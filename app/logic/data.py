@@ -32,24 +32,19 @@ class TweetGrabber(object):
             for friend in page:
                 friend_ids.append(friend.id)
 
-        print 'Total Friends: {}'.format(len(friend_ids))
-
         # Loop through each friend and get their friend IDs
         fid_list = np.random.choice(friend_ids, 15, replace=False).tolist()  # Try choosing random friends
         fid_list2 = []
         counter = 1
         for fid in fid_list:
-            print 'Scraping Friend {}'.format(counter)
             counter += 1
             fof = tweepy.Cursor(self.api.friends_ids, id=fid, count=5000).pages(1)
             for page in fof:
-                print 'Total friends of {}: {}'.format(counter, len(page))
                 for id2 in page:
                     fid_list2.append(id2)
 
         # Combine lists
         all_ids = fid_list + fid_list2
-        print 'Total Ids: {}'.format(len(all_ids))
 
         # Get descriptions from ID list
         descriptions = []
@@ -65,7 +60,6 @@ class TweetGrabber(object):
             for user in chunk_users:
                 descriptions.append(user.description)
 
-            print loop_count
             loop_count += 1
 
         return descriptions

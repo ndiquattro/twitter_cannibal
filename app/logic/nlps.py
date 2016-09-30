@@ -107,10 +107,7 @@ def cluster_terms(docs):
         del word_counts
 
         # Combine
-        print unis
-        print bis
         topdf = pd.DataFrame(unis + bis)
-        print topdf
 
         return topdf
 
@@ -128,6 +125,5 @@ def cluster_terms(docs):
 
     # final result
     term_counts = pd.concat(term_counts)
-    print term_counts
 
     return term_counts.sort_values('count', ascending=False)

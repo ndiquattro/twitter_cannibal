@@ -31,8 +31,6 @@ def authuser():
     # Save session
     session.permanent = True
     session['userid'] = uinfo.id
-    print 'From Twitter ID: {}'.format(uinfo.id)
-    print 'In session ID: {}'.format(session['userid'])
 
     # Add user to database
     # Check if we've already authed before
@@ -62,7 +60,6 @@ def authreddit():
     # Get tokens
     cbacktoken = request.args.get('code')
     access_info = r.get_access_information(cbacktoken)
-    print access_info
 
     # Add info to database
     curusr = models.User.lookup_user(session['userid'])
