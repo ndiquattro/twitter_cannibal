@@ -18,7 +18,11 @@
         {% else %}
           <button type="button" class="list-group-item">
           {% endif %}
-          <a class="text-center text-capitalize" href={{ url_for('splash.search', term=term) }}>{{ term }}</a></button>
+          {% if demo %}
+            <a class="text-center text-capitalize" href={{ url_for('splash.demo', term=term) }}>{{ term }}</a></button>
+          {% else %}
+            <a class="text-center text-capitalize" href={{ url_for('splash.search', term=term) }}>{{ term }}</a></button>
+          {% endif %}
         {% endfor %}
       </div>
       </div>

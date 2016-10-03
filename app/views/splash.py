@@ -72,6 +72,23 @@ def search(term):
                            terms=topterms, noreddit=noreddit, curterm=term)
 
 
+@splash.route('/demo/<string:term>')
+def demo(term):
+    # Search Reddit
+    search_results = search_reddit(term)
+
+    # Found terms
+    topterms = ['data', 'writer', 'news', 'nfl', 'sports', 'founder', 'editor',
+                'data scientist', 'data science', 'ceo', 'npr']
+
+    # Reddit account check
+    noreddit = session.get('noreddit')
+
+    return render_template("splash/search.html", redresults=search_results,
+                           terms=topterms, noreddit=noreddit, curterm=term,
+                           demo=True)
+
+
 @splash.route('/sendtosub/<string:sub>')
 def sendtosub(sub):
     # Look up current user

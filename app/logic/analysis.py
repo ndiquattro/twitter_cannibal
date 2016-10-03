@@ -22,7 +22,6 @@ def validate(terms, uobj):
     # Get current user's subreddits
     rinfo = RedditData(uobj.redtoken, uobj.redrefresh)
     user_subs = set(rinfo.get_subs())
-    print 'user subs: {}'.format(user_subs)
     all_subs = []
 
     for term in terms:
@@ -40,7 +39,6 @@ def validate(terms, uobj):
         Stats.add_data(res_ob, uobj)
 
     # Find number of user subs that matched
-    print user_subs
     all_matches = user_subs.intersection(all_subs)
     Stats.add_data({'term': 'allsubs', 'num_results': len(user_subs),
                     'num_matches': len(all_matches)}, uobj)
